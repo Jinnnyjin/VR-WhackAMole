@@ -42,19 +42,17 @@ public class SpawnManager : MonoBehaviour
         // 가능한 리스트에서 삭제
         availableHoles.RemoveAt(index);
 
-        GameObject mole = molePool.Get();
-        mole.transform.SetPositionAndRotation(hole.position, hole.rotation);
+        GameObject moleObject = molePool.Get();
+        moleObject.transform.SetPositionAndRotation(hole.position, hole.rotation);
 
-        StartCoroutine(DespawnAfterDelay(mole, hole));
+        Mole mole = moleObject.GetComponent<Mole>();
+        mole.Setup(this, hole, moleVisibleDuration);
     }
 
-    private IEnumerator DespawnAfterDelay(GameObject mole, Transform hole)
+    // Mole이 맞았거나 시간 초과됐을 때 스스로 호출하는 반환 처리
+    public void ReturnMole(GameObject moleObject, Transform hole)
     {
-        // Visible Duration동안 대기
-        yield return new WaitForSeconds(moleVisibleDuration);
-
-        // 사용 후 릴리즈, Hole 가능한 리스트에 추가
-        molePool.Release(mole);
+        molePool.Release(moleObject);
         availableHoles.Add(hole);
     }
 }

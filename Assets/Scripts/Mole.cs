@@ -7,6 +7,7 @@ public class Mole : MonoBehaviour
     [SerializeField] private Color hitColor = Color.red;
     [SerializeField] private float hitFlashDuration = 0.15f;
     [SerializeField] private int scoreValue = 1; // 두더지 종류별 점수 (폭탄 등은 음수로 설정)
+    [SerializeField] private AudioClip hitSound; // 두더지 종류별 히트 효과음
 
     private bool isResolved;
     private Coroutine timeoutCoroutine;
@@ -62,6 +63,11 @@ public class Mole : MonoBehaviour
             StopCoroutine(timeoutCoroutine);
 
         scoreManager.AddScore(scoreValue);
+
+        // 오브젝트가 풀로 반환되며 비활성화돼도 끊기지 않도록 그 자리에서 독립 재생
+        if (hitSound != null)
+            AudioSource.PlayClipAtPoint(hitSound, transform.position);
+
         StartCoroutine(FlashThenReturn());
     }
 

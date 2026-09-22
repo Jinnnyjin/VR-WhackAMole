@@ -5,7 +5,8 @@ using UnityEngine.InputSystem;
 
 public enum GameState
 {
-    Ready,
+    Idle,
+    Countdown,
     Playing,
     GameOver
 }
@@ -21,20 +22,16 @@ public class GameManager : MonoBehaviour
     public event Action<int> OnCountdownTick; // 남은 카운트다운 (초 단위 정수)
     public event Action<float> OnTimeTick; // 남은 플레이 시간
 
-    public GameState State { get; private set; } = GameState.Ready;
+    public GameState State { get; private set; } = GameState.Idle;
     public float TimeRemaining { get; private set; }
 
     private Coroutine gameRoutine;
 
-    private void Start()
-    {
-        StartGame();
-    }
-
     private void Update()
     {
-        // UI 없이 재시작 흐름 검증하기 위한 임시 입력 (4번 UI 작업 후 버튼으로 대체)
-        if (State == GameState.GameOver && Keyboard.current != null && Keyboard.current.rKey.wasPressedThisFrame)
+        // UI 없이 시작/재시작 흐름 검증하기 위한 임시 입력 (실제로는 StartButton/RestartButton으로 트리거)
+        bool canStartWithKey = State == GameState.Idle || State == GameState.GameOver;
+        if (canStartWithKey && Keyboard.current != null && Keyboard.current.rKey.wasPressedThisFrame)
             StartGame();
     }
 
@@ -78,7 +75,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator CountdownRoutine()
     {
-        SetState(GameState.Ready);
+        SetState(GameState.Countdown);
 
         int lastSecond = -1;
         float remaining = countdownDuration;

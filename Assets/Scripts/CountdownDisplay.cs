@@ -28,7 +28,7 @@ public class CountdownDisplay : MonoBehaviour
 
     private void HandleGameStateChanged(GameState state)
     {
-        label.enabled = state == GameState.Ready;
+        label.enabled = state == GameState.Countdown;
     }
 
     private void UpdateLabel(int secondsLeft)

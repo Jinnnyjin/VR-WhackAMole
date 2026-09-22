@@ -103,7 +103,7 @@ public class GameManager : MonoBehaviour
     {
         spawnManager.StopSpawning();
         SetState(GameState.GameOver);
-        Debug.Log($"[Game] Game Over! Final score: {scoreManager.Score} (R키로 재시작)");
+        Debug.Log($"[Game] Game Over! Final score: {scoreManager.Score} (리스타트 버튼을 치거나 에디터에서 R키로 재시작)");
     }
 
     private void SetState(GameState newState)

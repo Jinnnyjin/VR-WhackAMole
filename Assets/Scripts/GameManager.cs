@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
         yield return StartCoroutine(CountdownRoutine());
 
         scoreManager.ResetScore();
-        spawnManager.StartSpawning();
+        spawnManager.StartSpawning(gameDuration);
         SetState(GameState.Playing);
 
         TimeRemaining = gameDuration;

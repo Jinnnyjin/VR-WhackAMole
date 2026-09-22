@@ -11,15 +11,29 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private float moleVisibleDuration = 1f;
 
     private List<Transform> availableHoles;
+    private Coroutine spawnCoroutine;
 
     private void Awake()
     {
         availableHoles = new List<Transform>(holes);
     }
 
-    private void Start()
+    // GameManager가 게임 시작/종료 타이밍에 맞춰 호출
+    public void StartSpawning()
     {
-        StartCoroutine(SpawnLoop());
+        if (spawnCoroutine != null)
+            return;
+
+        spawnCoroutine = StartCoroutine(SpawnLoop());
+    }
+
+    public void StopSpawning()
+    {
+        if (spawnCoroutine == null)
+            return;
+
+        StopCoroutine(spawnCoroutine);
+        spawnCoroutine = null;
     }
 
     private IEnumerator SpawnLoop()

@@ -6,6 +6,7 @@ public class SpawnManager : MonoBehaviour
 {
     [SerializeField] private List<Transform> holes;
     [SerializeField] private MolePool molePool;
+    [SerializeField] private ScoreManager scoreManager;
     [SerializeField] private float spawnInterval = 1.5f;
     [SerializeField] private float moleVisibleDuration = 1f;
 
@@ -46,7 +47,7 @@ public class SpawnManager : MonoBehaviour
         moleObject.transform.SetPositionAndRotation(hole.position, hole.rotation);
 
         Mole mole = moleObject.GetComponent<Mole>();
-        mole.Setup(this, hole, moleVisibleDuration);
+        mole.Setup(this, scoreManager, hole, moleVisibleDuration);
     }
 
     // Mole이 맞았거나 시간 초과됐을 때 스스로 호출하는 반환 처리

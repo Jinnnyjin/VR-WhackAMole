@@ -6,10 +6,12 @@ public class Mole : MonoBehaviour
     [SerializeField] private float hitVelocityLimit = 1f;
     [SerializeField] private Color hitColor = Color.red;
     [SerializeField] private float hitFlashDuration = 0.15f;
+    [SerializeField] private int scoreValue = 1; // 두더지 종류별 점수 (폭탄 등은 음수로 설정)
 
     private bool isResolved;
     private Coroutine timeoutCoroutine;
     private SpawnManager spawnManager;
+    private ScoreManager scoreManager;
     private Transform hole;
 
     private Renderer moleRenderer;
@@ -27,9 +29,10 @@ public class Mole : MonoBehaviour
         moleRenderer.material.color = originalColor;
     }
 
-    public void Setup(SpawnManager manager, Transform assignedHole, float visibleDuration)
+    public void Setup(SpawnManager manager, ScoreManager score, Transform assignedHole, float visibleDuration)
     {
         spawnManager = manager;
+        scoreManager = score;
         hole = assignedHole;
 
         // 맞아서 사라질 때 타임아웃 코루틴 종료시킬 수 있도록 담아두기
@@ -58,6 +61,7 @@ public class Mole : MonoBehaviour
         if (timeoutCoroutine != null)
             StopCoroutine(timeoutCoroutine);
 
+        scoreManager.AddScore(scoreValue);
         StartCoroutine(FlashThenReturn());
     }
 

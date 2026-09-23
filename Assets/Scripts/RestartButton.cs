@@ -9,10 +9,12 @@ public class RestartButton : MonoBehaviour
     [SerializeField] private AudioClip pressSound;
 
     private Collider col;
+    private Renderer[] buttonRenderers;
 
     private void Awake()
     {
         col = GetComponent<Collider>();
+        buttonRenderers = GetComponentsInChildren<Renderer>();
     }
 
     private void OnEnable()
@@ -28,8 +30,11 @@ public class RestartButton : MonoBehaviour
 
     private void HandleGameStateChanged(GameState state)
     {
-        // 게임오버일 때만 콜라이더를 켜서 오작동 방지 (오브젝트 자체를 끄면 이 이벤트 구독도 끊기므로 콜라이더만 토글)
-        col.enabled = state == GameState.GameOver;
+        // 게임오버일 때만 콜라이더를 켜서 오작동 방지 (오브젝트 자체를 끄면 이 이벤트 구독도 끊기므로 콜라이더/렌더러만 토글)
+        bool isActive = state == GameState.GameOver;
+        col.enabled = isActive;
+        foreach (Renderer r in buttonRenderers)
+            r.enabled = isActive;
     }
 
     private void OnTriggerEnter(Collider other)

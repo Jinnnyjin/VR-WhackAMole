@@ -9,10 +9,12 @@ public class StartButton : MonoBehaviour
     [SerializeField] private AudioClip pressSound;
 
     private Collider col;
+    private Renderer[] buttonRenderers;
 
     private void Awake()
     {
         col = GetComponent<Collider>();
+        buttonRenderers = GetComponentsInChildren<Renderer>();
     }
 
     private void OnEnable()
@@ -28,7 +30,10 @@ public class StartButton : MonoBehaviour
 
     private void HandleGameStateChanged(GameState state)
     {
-        col.enabled = state == GameState.Idle;
+        bool isActive = state == GameState.Idle;
+        col.enabled = isActive;
+        foreach (Renderer r in buttonRenderers)
+            r.enabled = isActive;
     }
 
     private void OnTriggerEnter(Collider other)
